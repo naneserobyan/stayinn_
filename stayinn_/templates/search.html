@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Все объекты — stayinn.com{% endblock %}
+{% block content %}
+
+<div class="search-layout">
+
+  <aside class="filters">
+    <form>
+      <input type="hidden" name="destination" value="{{ state.destination }}">
+
+      <h3>{{tr('price_night')}}</h3>
+      <div class="range-label"><span id="minOut">{{ min_price|round|int }} {{currency}}</span><span id="maxOut">{{ max_price|round|int }} {{currency}}</span></div>
+      <div class="dual-range">
+        <input type="range" id="minPrice" name="min_price" min="{{ price_floor }}" max="{{ price_ceil }}" step="1" value="{{ min_price }}">
+        <input type="range" id="maxPrice" name="max_price" min="{{ price_floor }}" max="{{ price_ceil }}" step="1" value="{{ max_price }}">
+      </div>
+      <input type="hidden" name="currency" value="{{currency}}">
+      <input type="hidden" name="lang" value="{{lang}}">
+
+      <h3>{{tr('accommodation_type')}}</h3>
+      {% for k,t in [('hotel','hotels'),('apartment','apartments'),('guesthouse','guesthouses'),('villa','villas')] %}
+        <label><input type="checkbox" name="accommodation" value="{{k}}" {% if k in types_selected %}checked{% endif %}> {{tr(t)}}</label>
+      {% endfor %}
+
+      <h3>{{tr('stars')}}</h3>
+      {% for s in [5, 4, 3] %}
+        <label><input type="checkbox" name="stars" value="{{ s }}" {% if s in stars_selected %}checked{% endif %}> {{ '★' * s }}</label>
+      {% endfor %}
+
+      <h3>{{tr('rating')}}</h3>
+      <label><input type="radio" name="min_rating" value="0" {% if min_rating == 0 %}checked{% endif %}> {{tr('any')}}</label>
+      <label><input type="radio" name="min_rating" value="9" {% if min_rating == 9 %}checked{% endif %}> 9+ {{tr('excellent')}}</label>
+
+      <h3>{{tr('amenities')}}</h3>
+      {% for k, t in [('breakfast', 'breakfast'), ('parking', 'parking'), ('central', 'central')] %}
+        <label><input type="checkbox" name="{{ k }}" {% if want[k] %}checked{% endif %}> {{tr(t)}}</label>
+      {% endfor %}
+
+      <h3>{{tr('sorting')}}</h3>
+      <select name="sort_by">
+        <option value="">{{tr('default')}}</option>
+        <option value="price_asc" {% if sort_by=='price_asc' %}selected{% endif %}>{{tr('cheaper')}}</option>
+        <option value="price_desc" {% if sort_by=='price_desc' %}selected{% endif %}>{{tr('expensive')}}</option>
+        <option value="rating" {% if sort_by=='rating' %}selected{% endif %}>{{tr('by_rating')}}</option>
+      </select>
+      <button class="primary full">{{tr('apply')}}</button>
+    </form>
+  </aside>
+
+  <section>
+    <div class="results-head">
+      <h2>{{tr("found")}}: {{ rooms|length }}</h2>
+      <a href="{{ url_for('map_view', destination=state.destination) }}">{{tr("open_map")}}</a>
+    </div>
+    <div class="cards results">
+      {% for room in rooms %}{% include '_card.html' %}{% else %}
+        <p class="muted">{{tr("nothing")}}</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <aside class="map-small">
+    <div id="search-map"></div>
+  </aside>
+
+</div>
+
+<script>window.STAYINN_POINTS = {{ map_points|tojson }};</script>
+{% endblock %}

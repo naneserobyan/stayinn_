@@ -1,0 +1,47 @@
+{% extends 'base.html' %}{% block title %}Введите свои данные — stayinn.com{% endblock %}{% block content %}
+<section class="checkout">
+  <div>
+    <div class="checkout-notice">
+      Почти готово! Просто заполните обязательные поля (*).<br>
+      Пожалуйста, укажите свои данные латинскими буквами, чтобы сотрудники объекта размещения смогли их понять.
+    </div>
+    <h1>Введите свои данные</h1>
+
+    <form method="post" class="checkout-form">
+      <div class="checkout-row-2">
+        <label>Имя (латиницей) *
+          <input type="text" name="first_name" placeholder="напр.: Ivan" required>
+        </label>
+        <label>Фамилия (латиницей) *
+          <input type="text" name="last_name" placeholder="напр.: Ivanov" required>
+        </label>
+      </div>
+
+      <label>Электронный адрес *
+        <input type="email" name="email" required>
+      </label>
+      <p class="muted" style="margin-top:-8px">На этот адрес будет отправлено подтверждение бронирования</p>
+
+      <label>Телефон *
+        <input type="tel" name="phone" required placeholder="+374 ...">
+      </label>
+      <p class="muted" style="margin-top:-8px">Для подтверждения бронирования и возможности связаться с вами при необходимости</p>
+
+      <button type="submit" class="checkout-submit">Забронировать — {{total|amd}} AMD</button>
+    </form>
+  </div>
+
+  <aside class="checkout-summary">
+    {% if room.photos %}<img src="{{room.photos[0]}}" alt="{{room.prop.name}}">{% endif %}
+    <h3>{{room.prop.name}}</h3>
+    <div class="muted">{{variant_name}}</div>
+    <div class="muted">{{room.meta.location}}</div>
+
+    <div class="checkout-price-row"><span>Заезд</span><b>{{ci.strftime('%d.%m.%Y')}} · 15:00</b></div>
+    <div class="checkout-price-row"><span>Отъезд</span><b>{{co.strftime('%d.%m.%Y')}} · 12:00</b></div>
+    <div class="checkout-price-row"><span>{{(total / nights)|round|int}} AMD × {{nights}} {{'ночь' if nights==1 else ('ночи' if nights<5 else 'ночей')}}</span><b>{{total|amd}} AMD</b></div>
+    <div class="checkout-price-total"><span>Итого</span><span>{{total|amd}} AMD</span></div>
+    <p class="muted" style="margin-top:8px">Включая налоги и сборы</p>
+  </aside>
+</section>
+{% endblock %}

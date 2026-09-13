@@ -1,0 +1,72 @@
+{
+  "10c0c44d": {
+    "country": "Armenia",
+    "breakfast": false,
+    "parking": true,
+    "central": false,
+    "description": "A quiet studio a few steps from the river, with a small balcony and a fully equipped kitchenette. Great base for exploring on foot."
+  },
+  "85d50462": {
+    "country": "Armenia",
+    "breakfast": true,
+    "parking": false,
+    "central": true,
+    "description": "Bright top-floor loft right off Republic Square. Walking distance to museums, restaurants, and the metro."
+  },
+  "300b7e21": {
+    "country": "Georgia",
+    "breakfast": true,
+    "parking": true,
+    "central": true,
+    "description": "A restored 19th-century house in the Old Town, with a carved wooden balcony and courtyard breakfast area."
+  },
+  "6302455d": {
+    "country": "Georgia",
+    "breakfast": false,
+    "parking": false,
+    "central": false,
+    "description": "Sea-facing room with a private balcony, a short walk from the Batumi Boulevard."
+  },
+  "3b12a501": {
+    "country": "France",
+    "breakfast": true,
+    "parking": false,
+    "central": true,
+    "description": "Classic Parisian apartment with high ceilings and herringbone floors, in the heart of Le Marais."
+  },
+  "655467d3": {
+    "country": "France",
+    "breakfast": false,
+    "parking": true,
+    "central": false,
+    "description": "A stone cottage surrounded by lavender fields, with a private garden and outdoor dining area."
+  },
+  "72b4e256": {
+    "country": "Italy",
+    "breakfast": true,
+    "parking": false,
+    "central": true,
+    "description": "Cozy studio on a cobblestone street in Trastevere, close to the best trattorias in Rome."
+  },
+  "da3e99d9": {
+    "country": "Italy",
+    "breakfast": true,
+    "parking": true,
+    "central": false,
+    "description": "A cliffside villa with a private terrace overlooking the Tyrrhenian Sea, ten minutes from the coastal path."
+  },
+  "0f00f0b6": {
+    "country": "Spain",
+    "breakfast": false,
+    "parking": false,
+    "central": true,
+    "description": "A renovated loft tucked into a quiet alley of the Gothic Quarter, close to the cathedral and the harbor."
+  },
+  "6f2bc206": {
+    "country": "Spain",
+    "breakfast": true,
+    "parking": true,
+    "central": false,
+    "description": "A whitewashed guesthouse with a tiled courtyard, run by a local family who makes breakfast every morning."
+  }
+}

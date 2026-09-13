@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% block title %}{{room.prop.name}} — stayinn.com{% endblock %}
+{% block content %}
+<section class="detail">
+    <a class="back" href="{{url_for('search')}}">← Все объекты</a>
+    
+    <div class="detail-head">
+        <div>
+            <h1>{{room.prop.name}}</h1>
+            <p class="muted">{{room.meta.location}} · <span class="stars">{{'★'*room.meta.stars}}</span></p>
+        </div>
+        <div>
+            <b class="rating big-rating">{{'%.1f'|format(room.meta.rating)}}</b> {{room.meta.rating_word}}
+        </div>
+    </div>
+
+    <div class="gallery">
+        {% for p in room.photos[:5] %}
+            <img src="{{p}}" alt="{{room.prop.name}}">
+        {% endfor %}
+    </div>
+
+    <div class="detail-grid">
+        <article>
+            <h2>{{tr("about")}}</h2>
+            <div class="description">
+                {% for paragraph in description_paragraphs %}
+                    <p>{{paragraph}}</p>
+                {% endfor %}
+            </div>
+
+            <h2>{{tr("amenities")}}</h2>
+            <div class="amenities">
+                {% for a in room.meta.amenity_labels %}
+                    <span>✓ {{ tr(a) }}</span>
+                {% endfor %}
+            </div>
+
+            
+            
+        </article>
+        
+        <aside>
+    <div class="mini-map">
+                <div id="hotel-map"></div>
+                <a class="mini-map-btn" href="{{url_for('map_view',focus=room.id)}}">{{ tr('show_on_map') }} →</a>
+            </div>
+        </aside>
+    </div>
+
+    
+    <section class="availability" id="availability">
+        <h2>{{tr("availability")}}</h2>
+
+        <form method="GET" action="" style="background-color: #febb02; padding: 12px; border-radius: 4px; display: flex; gap: 8px; align-items: center; margin-bottom: 20px;">
+            <!-- Ամսաթվեր -->
+            <div style="background: white; padding: 8px 12px; border-radius: 4px; display: flex; align-items: center; gap: 8px; flex: 1; border: 1px solid #e7e7e7;">
+                <span>📅</span>
+                <div style="display: flex; align-items: center; gap: 6px; width: 100%; font-size: 14px;">
+                    <input type="date" name="check_in" value="{{ state.check_in }}" style="border: none; outline: none; background: transparent; font-size: 14px; font-family: inherit; cursor: pointer;">
+                    <span>—</span>
+                    <input type="date" name="check_out" value="{{ state.check_out }}" style="border: none; outline: none; background: transparent; font-size: 14px; font-family: inherit; cursor: pointer;">
+                </div>
+            </div>
+            
+            
+            <div style="background: white; padding: 8px 12px; border-radius: 4px; display: flex; align-items: center; gap: 8px; flex: 1; border: 1px solid #e7e7e7;">
+                <span></span>
+                <div style="display: flex; align-items: center; gap: 10px; width: 100%; font-size: 14px;">
+                    <label style="display: flex; align-items: center; gap: 4px; font-size: 13px;">
+                        {{ tr('adults') }}:
+                        <input type="number" name="adults" value="{{ state.adults }}" min="1" style="width: 45px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 4px; font-size: 13px;">
+                        {{ tr('children') }}:
+                        <input type="number" name="children" value="{{ state.children if state.children is defined else 0 }}" min="0" style="width: 45px; padding: 2px 4px; border: 1px solid #ccc; border-radius: 3px;">
+                    </label>
+                </div>
+            </div>
+
+            
+            <button type="submit" style="background: #0071c2; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 14px; white-space: nowrap;">
+                {{ tr('change_search_params') }}
+            </button>
+        </form>
+
+        <div class="type-filter">
+            <b>{{tr('accommodation_type')}}:</b>
+            <span class="type-pill">{{tr(room.meta.accommodation_label)}}</span>
+        </div>
+
+        {% if ci and co %}
+            <table class="avail-table">
+                <thead>
+                   <tr>
+    <th>Тип номера</th>
+    <th>Цена за {{nights}} {{'ночь' if nights==1 else ('ночи' if nights<5 else 'ночей')}}</th>
+    <th>На ваш выбор</th>
+    <th>Выберите номера</th>
+    <th></th>
+</tr>
+                </thead>
+                <tbody>
+                    {% for v in room_types %}
+                    <tr class="avail-row" data-cat="{{v.category}}">
+                        <td class="room-type-col">
+                            <a class="room-type-name" href="#{{v.key}}">{{v.name}}</a>
+                            {% if v.recommended %}<div class="reco-badge">Рекомендованный вариант для {{state.adults}} взрослого{% if state.children %} и {{state.children}} ребёнка{% endif %}</div>{% endif %}
+                            {% if v.left %}<div class="left-badge">🔥 У нас осталось всего {{v.left}} номера</div>{% endif %}
+                            <div class="bed-line">🛏 Кровати: {{v.beds}}</div>
+                            <div class="facility-chips">
+                                {% for f in v.facilities[:5] %}<span>{{f}}</span>{% endfor %}
+                                <span>📐 {{v.size}} кв. м</span>
+                            </div>
+                            <ul class="checklist">
+                                {% for c in v.checklist[:8] %}<li>✓ {{c}}</li>{% endfor %}
+                            </ul>
+                            <a href="javascript:void(0)" class="show-more-checklist">Ещё</a>
+                            <ul class="checklist checklist-more" hidden>
+                                {% for c in v.checklist[8:] %}<li>✓ {{c}}</li>{% endfor %}
+                            </ul>
+                        </td>
+                        <td class="price-col">
+                            {% if available %}
+                                <b>{{(v.total_amd * (1 if currency=='AMD' else (0.215 if currency=='RUB' else 0.00256)))|round|int|amd}} {{currency}}</b><div class="muted">Включая налоги и сборы</div>
+                            {% else %}
+                                <span class="unavailable">Занято на эти даты</span>
+                            {% endif %}
+                        </td>
+                        <td class="features-col">
+                            <div class="feature warn">⊘ Отмена за стоимость первой ночи</div>
+                            <div class="feature good">✓ Предоплата не требуется — платите на месте</div>
+                            <div class="feature neutral">💳 Банковская карта не нужна</div>
+                        </td>
+                        <td class="qty-col">
+                            <select {% if not available %}disabled{% endif %}>
+                                <option value="0">0</option>
+                                <option value="1" selected>1</option>
+                            </select>
+                        </td>
+                        <td>
+                            {% if available %}
+                                <a class="reserve" href="{{url_for('checkout',property_id=room.id,check_in=state.check_in,check_out=state.check_out,adults=state.adults,children=state.children,infants=state.infants,pets=state.pets,variant_name=v.name,variant_price=v.price_per_night)}}">{{tr("reserve")}}</a>
+                            {% else %}
+                                <button class="reserve" disabled>Занято</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p class="muted" style="margin-top:6px">Вы пока ничего не платите</p>
+        {% else %}
+            <p class="muted">Выберите даты заезда и выезда выше, чтобы увидеть наличие мест и цены.</p>
+        {% endif %}
+
+        <section class="property-policies">
+            <h2>{{tr('special_requests')}}</h2>
+            <p><b>{{room.prop.name}}</b> {{tr('special_requests_text')}}</p>
+            <div class="policy-grid">
+                <div class="policy-card"><h3>🕒 {{tr('checkin')}}</h3><b>{{tr('from')}} 15:00</b></div>
+                <div class="policy-card"><h3>🕒 {{tr('checkout')}}</h3><b>{{tr('until')}} 12:00</b></div>
+            </div>
+            <div class="policy-card">
+                <h3>🛏 {{tr('child_beds')}}</h3>
+                <h4>{{tr('children_rules')}}</h4>
+                <p>{{tr('any_age')}}</p>
+                <p>{{tr('children_fee')}}</p>
+                <p>{{tr('children_search')}}</p>
+            </div>
+            <div class="policy-card">
+                <h3>🐾 {{tr('pets')}}</h3>
+                <p>{{tr('no_pets')}}</p>
+            </div>
+            <div class="policy-card cash-policy">
+                <h3>💵 {{tr('cash_only')}}</h3>
+                <p>{{tr('cash_text')}}</p>
+            </div>
+        </section>
+    </section>
+</section>
+
+<script>
+    window.HOTEL_POINT = {{self_point|tojson}};
+    window.HOTEL_PRICE = {{room.price_amd}};
+</script>
+{% endblock %}

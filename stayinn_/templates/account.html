@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Мои бронирования — stayinn.com{% endblock %}
+{% block content %}
+<section class="account-page">
+  <h1>Мои бронирования</h1>
+  <p class="muted">{{ email }}</p>
+
+  {% if profile.bookings %}
+    <div class="account-bookings">
+      {% for b in profile.bookings %}
+        <div class="account-booking-card">
+          <div>
+            <b>{{ b.property }}</b>
+            {% if b.room_type %}<div class="muted">{{ b.room_type }}</div>{% endif %}
+            <div class="muted">{{ b.check_in }} → {{ b.check_out }}</div>
+            <div class="muted">Забронировано {{ b.created_at }}</div>
+          </div>
+          <div class="account-booking-right">
+            <div class="account-ref">№ {{ b.ref }}</div>
+            <div class="account-total">{{ b.total|amd }} AMD</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">Пока нет бронирований. <a href="{{ url_for('index') }}">Найти жильё →</a></p>
+  {% endif %}
+</section>
+{% endblock %}

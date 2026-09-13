@@ -1,0 +1,62 @@
+{
+  "10c0c44d": {
+    "property_id": "10c0c44d",
+    "name": "Riverside Studio",
+    "price_per_night": 38,
+    "bookings": []
+  },
+  "85d50462": {
+    "property_id": "85d50462",
+    "name": "Republic Square Loft",
+    "price_per_night": 72,
+    "bookings": []
+  },
+  "300b7e21": {
+    "property_id": "300b7e21",
+    "name": "Old Tbilisi House",
+    "price_per_night": 55,
+    "bookings": []
+  },
+  "6302455d": {
+    "property_id": "6302455d",
+    "name": "Batumi Seaview Room",
+    "price_per_night": 64,
+    "bookings": []
+  },
+  "3b12a501": {
+    "property_id": "3b12a501",
+    "name": "Le Marais Apartment",
+    "price_per_night": 145,
+    "bookings": []
+  },
+  "655467d3": {
+    "property_id": "655467d3",
+    "name": "Provence Countryside Cottage",
+    "price_per_night": 98,
+    "bookings": []
+  },
+  "72b4e256": {
+    "property_id": "72b4e256",
+    "name": "Trastevere Studio",
+    "price_per_night": 110,
+    "bookings": []
+  },
+  "da3e99d9": {
+    "property_id": "da3e99d9",
+    "name": "Amalfi Coast Villa",
+    "price_per_night": 210,
+    "bookings": []
+  },
+  "0f00f0b6": {
+    "property_id": "0f00f0b6",
+    "name": "Gothic Quarter Loft",
+    "price_per_night": 88,
+    "bookings": []
+  },
+  "6f2bc206": {
+    "property_id": "6f2bc206",
+    "name": "Andalusian Guesthouse",
+    "price_per_night": 52,
+    "bookings": []
+  }
+}

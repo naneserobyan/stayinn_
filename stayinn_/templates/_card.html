@@ -1,0 +1,18 @@
+<article class="card">
+  <div class="card-img">
+    <img src="{{ room.photos[0] }}" alt="{{ room.prop.name }}" loading="lazy">
+    <button class="review-open" data-review-id="{{ room.id }}">{{ room.meta.reviews }} отзывов</button>
+  </div>
+
+  <a class="card-body" href="{{ url_for('property_detail', property_id=room.id) }}">
+    <div class="row">
+      <h3>{{ room.prop.name }}</h3>
+      <span class="stars">{{ '★' * room.meta.stars }}</span>
+    </div>
+    <p class="muted">{{ room.meta.location }}</p>
+    <div class="row">
+      <span><b class="rating">{{ '%.1f'|format(room.meta.rating) }}</b> {{ room.meta.rating_word }}</span>
+      <span class="price">{{ (room.price_amd * (1 if currency=='AMD' else (0.215 if currency=='RUB' else 0.00256)) )|round|int|amd }} {{currency}} <small>/ ночь</small></span>
+    </div>
+  </a>
+</article>

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="{{ 'hy' if lang == 'AM' else 'ru' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}stayinn.com — жильё, куда хочется вернуться{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+
+  <header class="header" id="top">
+    <a class="logo" href="{{ url_for('index') }}"><span>stay</span><b>inn</b></a>
+    <nav>
+      <a href="{{ url_for('index') }}">{{ tr('home') }}</a>
+      <a href="{{ url_for('search') }}">{{ tr('all_properties') }}</a>
+    </nav>
+    <div class="account">
+      <div class="pref-select">
+        <select onchange="location.href='{{ url_for('preferences') }}?lang='+this.value+'&next='+encodeURIComponent(location.href)">
+          {% for code,name in langs.items() %}<option value="{{code}}" {% if lang==code %}selected{% endif %}>{{code}}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="pref-select">
+        <select onchange="location.href='{{ url_for('preferences') }}?currency='+this.value+'&next='+encodeURIComponent(location.href)">
+          {% for code,name in currencies.items() %}<option value="{{code}}" {% if currency==code %}selected{% endif %}>{{name}}</option>{% endfor %}
+        </select>
+      </div>
+      {% if user_email %}
+        <a href="{{ url_for('account') }}">{{tr('my_bookings')}}</a>
+        <a href="{{ url_for('logout') }}">{{tr('logout')}}</a>
+      {% else %}
+        <button data-modal-open="register">{{tr('register')}}</button>
+        <button data-modal-open="login">{{tr('login_account')}}</button>
+      {% endif %}
+    </div>
+  </header>
+
+  {% include '_searchbar.html' %}
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for c, m in messages %}
+          <div class="flash {{ c }}">{{ m }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <div class="modal" id="login-modal">
+    <div class="modal-card">
+      <button class="modal-x" data-modal-close>×</button>
+      <h2>{{tr("login_account")}}</h2>
+      <form method="post" action="{{ url_for('login') }}">
+        <label>Email<input type="email" name="email" required></label>
+        <button class="primary" type="submit">{{tr("login")}}</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="register-modal">
+    <div class="modal-card">
+      <button class="modal-x" data-modal-close>×</button>
+      <h2>{{tr("register")}}</h2>
+      <form method="post" action="{{ url_for('register') }}">
+        <label>Имя<input name="name" required></label>
+        <label>Email<input type="email" name="email" required></label>
+        <button class="primary" type="submit">{{tr("create_account")}}</button>
+      </form>
+    </div>
+  </div>
+
+  <footer></footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>window.STAYINN_CURRENCY={{currency|tojson}};window.STAYINN_LANG={{lang|tojson}};</script><script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

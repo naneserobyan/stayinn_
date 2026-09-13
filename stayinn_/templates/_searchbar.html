@@ -1,0 +1,62 @@
+{% if request.endpoint == 'property_detail' %}
+  {% set search_action = url_for('property_detail', property_id=request.view_args.property_id) %}
+{% elif request.endpoint == 'map_view' %}
+  {% set search_action = url_for('map_view') %}
+{% else %}
+  {% set search_action = url_for('search') %}
+{% endif %}
+
+<form class="searchbar" action="{{ search_action }}" method="get">
+  <div>
+   <small>{{ tr('where') }}</small>
+   <input name="destination" value="{{ state.destination }}" placeholder="{{ tr('city_or_property') }}">
+  </div>
+  <div>
+    <small>{{ tr('checkin') }}</small>
+    <input type="date" name="check_in" value="{{ state.check_in }}" min="{{ today }}">
+  </div>
+  <div>
+    <small>{{ tr('checkout') }}</small>
+    <input type="date" name="check_out" value="{{ state.check_out }}" min="{{ today }}">
+  </div>
+  <div class="guests-field" id="guestsField">
+    <small>{{ tr('guests') }}</small>
+    <button type="button" class="guests-toggle" id="guestsToggle">
+     <span id="guestsSummary">
+    {{ state.adults }} {{ 'adult' if lang == 'EN' else 'взросл.' }}
+    {% if state.children %}
+        , {{ state.children }} {{ 'child' if lang == 'EN' else 'детей' }}
+    {% endif %}
+</span>
+    </button>
+    <input type="hidden" name="adults" id="adultsInput" value="{{ state.adults }}">
+    <input type="hidden" name="children" id="childrenInput" value="{{ state.children }}">
+
+    <div class="guests-panel" id="guestsPanel" hidden>
+      <div class="guests-row">
+        <div>
+          <b>{{ tr('adults') }}</b>
+          <div class="muted">от 13 лет</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="step-btn" data-target="adults" data-dir="-1">−</button>
+          <span id="adultsCount">{{ state.adults }}</span>
+          <button type="button" class="step-btn" data-target="adults" data-dir="1">+</button>
+        </div>
+      </div>
+      <div class="guests-row">
+        <div>
+          <b>{{ tr('children') }}</b>
+          <div class="muted">2–12 лет</div>
+        </div>
+        <div class="stepper">
+          <button type="button" class="step-btn" data-target="children" data-dir="-1">−</button>
+          <span id="childrenCount">{{ state.children }}</span>
+          <button type="button" class="step-btn" data-target="children" data-dir="1">+</button>
+        </div>
+      </div>
+      <button type="button" class="guests-done" id="guestsDone">Готово</button>
+    </div>
+  </div>
+  <button>Поиск</button>
+</form>

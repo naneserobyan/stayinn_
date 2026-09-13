@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Карта — stayinn.com{% endblock %}
+{% block content %}
+
+<section class="map-page">
+  <div class="map-head">
+    <div>
+      <h1>Жильё на карте</h1>
+      <p>Все доступные объекты и цены за ночь.</p>
+    </div>
+    <a class="secondary" href="{{ url_for('search') }}">← К списку</a>
+  </div>
+
+  <div id="full-map"></div>
+</section>
+
+<script>
+    window.STAYINN_POINTS = {{ map_points|tojson }};
+    window.FULL_MAP = true;
+    window.FOCUS_ID = "{{ focus_id | default('') }}";
+</script>
+{% endblock %}

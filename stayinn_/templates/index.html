@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="hero">
+  <div>
+    <p class="eyebrow">STAYINN.COM</p>
+    <h1>Найдите жильё,<br>куда хочется вернуться</h1>
+    <p>Квартиры, дома и виллы в Армении, Грузии и Европе — с честными ценами и отзывами гостей.</p>
+  </div>
+  <div class="hero-note">
+    10 проверенных объектов<br>
+    <strong>Армения · Грузия · Европа</strong>
+  </div>
+</section>
+
+{% for title, sub, rooms in sections %}
+  <section class="section">
+    <div class="section-title">
+      <div>
+        <h2>{{ title }}</h2>
+        <p>{{ sub }}</p>
+      </div>
+      <a href="{{ url_for('search') }}">Смотреть все →</a>
+    </div>
+    <div class="cards">
+      {% for room in rooms %}{% include '_card.html' %}{% endfor %}
+    </div>
+  </section>
+{% endfor %}
+
+{% endblock %}

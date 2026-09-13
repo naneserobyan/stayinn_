@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="confirmed">
+  <div class="check">✓</div>
+  <p class="eyebrow">БРОНИРОВАНИЕ ПОДТВЕРЖДЕНО</p>
+  <h1>Спасибо, {{ b.name }}!</h1>
+  <p>Ваше жильё забронировано. Номер брони: <b>{{ b.ref }}</b></p>
+  {% if b.email %}<p class="muted">Подтверждение отправлено на {{ b.email }}</p>{% endif %}
+
+  <div class="confirm-card">
+    <h2>{{ b.property }}</h2>
+    {% if b.room_type %}<div class="muted">{{ b.room_type }}</div>{% endif %}
+    <div>{{ b.check_in }} → {{ b.check_out }}</div>
+    <div>{{ b.nights }} ноч. · <b>{{ b.total|amd }} AMD</b></div>
+  </div>
+
+  <a class="primary" href="{{ url_for('index') }}">Вернуться на главную</a>
+</section>
+{% endblock %}
